@@ -1,8 +1,8 @@
 const express = require('express');
-const poopRouter = require('./poop.router');
+const poopCtrl = require('../controllers/poop.controller');
 
 const router = express.Router();
 
-router.use(poopRouter);
+router.get('/poop', poopCtrl.poop);
 
 module.exports = router;
