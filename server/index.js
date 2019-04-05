@@ -8,6 +8,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const fs = require('fs');
+const path = require('path');
 
 const config = require('./config/config.js');
 const error = require('./api/v1/middlewares/error.js');
@@ -29,6 +30,15 @@ dbConnection.once('open', () => {
 });
 
 const app = express();
+
+app.use('/', (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Expires', '0');
+    res.set('Surrogate-Control', 'no-store');
+    res.set('Pragma', 'no-cache');
+    next();
+}, express.static(path.join(__dirname, '/public')));
+
 
 app.use(compression());
 
