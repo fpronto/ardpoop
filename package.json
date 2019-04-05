@@ -1,0 +1,53 @@
+{
+    "name": "adnetwork-server",
+    "version": "0.1.0",
+    "description": "Adnetwork server with REST API and Socket service. Contains all business logic and architecture to supply high availability and performance in realtime.",
+    "author": "Filipe Rainho <filiperainho@crossinganswers.com> for Crossing Answers",
+    "contributors": [],
+    "main": "index.js",
+    "private": true,
+    "license": "UNLICENSED",
+    "keywords": [
+        "express",
+        "socket.io",
+        "node.js",
+        "mongodb",
+        "mongoose",
+        "es6",
+        "REST",
+        "API"
+    ],
+    "dependencies": {
+        "async": "2.6.0",
+        "bcryptjs": "2.4.3",
+        "body-parser": "1.18.2",
+        "compression": "1.7.1",
+        "cors": "2.8.4",
+        "dotenv": "5.0.1",
+        "express": "4.16.3",
+        "express-mongo-sanitize": "1.3.2",
+        "express-validator": "3.2.1",
+        "helmet": "3.13.0",
+        "http-status": "1.0.1",
+        "jsonwebtoken": "7.4.3",
+        "moment": "2.21.0",
+        "mongoose": "5.2.0",
+        "mongoose-paginate": "5.0.3",
+        "morgan": "1.9.0",
+        "multer": "1.3.0",
+        "nodemailer": "4.6.4",
+        "randomstring": "1.1.5",
+        "sharp": "^0.20.8",
+        "uuid": "^3.3.2",
+        "validator": "^10.9.0"
+    },
+    "devDependencies": {
+        "eslint": "^5.9.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.14.0",
+        "eslint-plugin-node": "^8.0.0"
+    },
+    "engines": {
+        "node": ">=6.0.0"
+    }
+}
