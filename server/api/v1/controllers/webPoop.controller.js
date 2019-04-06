@@ -2,8 +2,12 @@ const APISuccess = require('../../../helpers/APISuccess');
 const poopService = require('../../../src/services/poop.service');
 
 function top(req, res, next) {
-    const response = new APISuccess({});
-    return res.status(response.getStatus()).json(response.getResponse());
+    const topTen = poopService.getTopTen((err, docs) => {
+        if (!err) {
+            const response = new APISuccess({ top: docs });
+            return res.status(response.getStatus()).json(response.getResponse());
+        }
+    });
 }
 
 function status(req, res, next) {

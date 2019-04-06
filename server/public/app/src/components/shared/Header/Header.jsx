@@ -1,23 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import logo from '../../../assets/logo.svg';
 
 import './header.css';
 
-const Header = (props) => {
-    const { title } = props;
+const Header = function (props) {
     return (
         <div className='header'>
-            <span className='header-title'>{title}</span>
+            <img src={logo} alt='logo'></img>
+            {/* <span className='header-title'>{title}</span> */}
         </div>
     );
 };
-
-Header.defaultProps = {
-};
-
-Header.propTypes = {
-    title: PropTypes.string.isRequired,
-};
-
 
 export default Header;

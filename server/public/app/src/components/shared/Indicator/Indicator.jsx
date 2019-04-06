@@ -11,8 +11,8 @@ const Indicator = (props) => {
     const sad = 'Houston, we have a problem';
     return (
         <div className='indicator'>
-            <img src={status ? poopHappy : poopSad} className="App-logo" alt="logo" />
-            <span className="indicator-text">{ status ? happy : sad }</span>
+            <img src={status ? poopSad : poopHappy} className="App-logo" alt="logo" />
+            <span className="indicator-text">{status ? sad : happy}</span>
         </div>
     );
 };

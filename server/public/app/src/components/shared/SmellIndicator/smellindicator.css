@@ -2,13 +2,46 @@
     position: absolute;
     top: 0;
     right: 0;
-    margin-top: 10px;   
-    margin-right: 20px;
+    margin-top: 20px;
+    margin-right: 30px;
     width: auto;
     height: auto;
     display: flex;
 }
 
+.smell-indicator-text{
+    display: flex;
+    flex-direction: column;
+    color: white;
+
+}
+
 .smell-indicator-value {
-    font-size: 50px;
+    font-size: 40px;
+}
+.smell-indicator-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 30px;
+    background-color: #5d606d;
+    overflow: hidden;
+    border: solid white;
+}
+.smell-indicator-icon img{
+    width: 50px;
+    height: 50px;
+}
+
+.green {
+    color: green;
+}
+.yellow {
+    color: yellow;
+}
+.orange {
+    color: orange;
+}
+.red {
+    color: red;
 }

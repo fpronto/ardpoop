@@ -78,9 +78,33 @@ function getToxicity() {
  * This returns the top teen of bathroom DESTRUCTIONS
  * @param {Function} callback - callback function
  */
-function getTopTeen(callback) {
+function getTopTen(callback) {
     // TODO
-    return callback(null, true);
+    Poop.find({}, '-v', (err, docs) => {
+        let returnDocs = docs.map((v) => {
+            const top = Math.max(...v.smellLevels);
+            const averageFunc = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
+
+            const average = averageFunc(v.smellLevels);
+            return {
+                user: v.user,
+                top,
+                average,
+                date: v.createdAt
+            };
+        });
+        returnDocs = returnDocs.sort((a, b) => {
+            return b.top - a.top;
+        });
+        returnDocs = returnDocs.slice(0, 10);
+
+        if (err) {
+            return callback(err);
+        }
+        return callback(null, returnDocs);
+    });
+    // return
+    // return callback(null, true);
 }
 
 module.exports = {
@@ -90,5 +114,5 @@ module.exports = {
     user,
     getStatus,
     getToxicity,
-    getTopTeen
+    getTopTen
 };

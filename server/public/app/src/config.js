@@ -1,4 +1,4 @@
 module.exports = {
-    dns: 'http://10.132.167.212',
-    port: 3000
+    dns: 'http://localhost',
+    port: 9000
 };

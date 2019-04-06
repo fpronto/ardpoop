@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import { get } from './helpers/xhrequests';
 import { Header, Indicator, Table, SmellIndicator } from './components/index';
 
 import * as config from './config';
-
 
 
 class App extends Component {
@@ -17,32 +15,54 @@ class App extends Component {
             top: [],
             smellValue: 0
         };
+        this.loadInfo = () => {
+            const { status, toxicity } = this.state;
+            const getStatus = get(`${config.dns}:${config.port}/api/v1/status`);
+
+            getStatus.then((data) => {
+                if (status !== data.json.data.status) {
+                    this.setState({ status: data.json.data.status });
+                }
+            }).catch(() => {
+                console.log('Error Getting bathroom Status');
+            });
+
+            const getToxicity = get(`${config.dns}:${config.port}/api/v1/toxicity`);
+
+            getToxicity.then((data) => {
+                const parsedInt = parseInt(data.json.data.toxicity, 10);
+                if (toxicity !== parsedInt) {
+                    this.setState({ smellValue: parsedInt });
+                }
+            }).catch(() => {
+                console.log('Error Getting bathroom Status');
+            });
+        };
     }
 
     componentDidMount() {
-        const initialInfo = get(`${config.dns}:${config.port}/api/v1/open`);
+        const getTop = get(`${config.dns}:${config.port}/api/v1/top`);
+        const { top } = this.state;
 
-        setTimeout(() => {
-            this.setState({ status: true, top: [{ name: 'Pronto', top: '50', average: '20' }, { name: 'Pronto2', top: '80', average: '50' }, { name: 'Pronto3', top: '100', average: '30' }], smellValue: 80});
-        }, 5000);
-        setTimeout(() => {
-            this.setState({ status: false, smellValue: 100 });
-        }, 10000);
 
-        initialInfo.then((data) => {
-            console.log(data);
+        getTop.then((data) => {
+            if (data.json.data.top) {
+                if (top !== data.json.data.top) {
+                    this.setState({ top: data.json.data.top });
+                }
+            }
         }).catch(() => {
-            console.log('error');
+            console.log('Error Getting bathroom Status');
         });
+        this.loadInfo();
+        setInterval(this.loadInfo, 1000);
     }
 
     render() {
         const { status, top, smellValue } = this.state;
-        console.log(status);
-        
         return (
             <div className="App">
-                <Header title="ARDpoop" />
+                <Header/>
                 <SmellIndicator smellValue={smellValue}/>
                 <Indicator status={status} />
                 <Table top={top}/>

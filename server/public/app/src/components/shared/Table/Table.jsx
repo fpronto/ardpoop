@@ -9,14 +9,17 @@ const Table = (props) => {
     const { top } = props;
     const columns = [{
         Header: 'Name',
-        accessor: 'name'
+        accessor: 'user'
     }, {
         Header: 'Average',
         accessor: 'average'
     }, {
         Header: 'Top',
         accessor: 'top'
-    }]
+    }, {
+        Header: 'Date',
+        accessor: 'date'
+    }];
 
     return (
         <div className="table">
@@ -24,6 +27,7 @@ const Table = (props) => {
                 data={top}
                 columns={columns}
                 pageSize = "10"
+                showPagination = {false}
             />
         </div>
     );

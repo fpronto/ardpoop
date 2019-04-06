@@ -7,6 +7,7 @@ const expressValidator = require('express-validator');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const fs = require('fs');
+const cors = require('cors');
 const path = require('path');
 
 const config = require('./config/config.js');
@@ -38,6 +39,11 @@ app.use('/', (req, res, next) => {
     next();
 }, express.static(path.join(__dirname, '/public')));
 
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(compression());
 
