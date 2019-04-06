@@ -1,0 +1,17 @@
+.indicator {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center
+}
+
+.indicator img{
+    width: 250px;
+    height: 250px;
+    margin: 5px;
+}
+
+.indicator-text {
+    margin: 50px;
+    font-size: 30px;
+}
