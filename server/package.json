@@ -1,8 +1,8 @@
 {
-    "name": "adnetwork-server",
+    "name": "poop-server",
     "version": "0.1.0",
-    "description": "Adnetwork server with REST API and Socket service. Contains all business logic and architecture to supply high availability and performance in realtime.",
-    "author": "Filipe Rainho <filiperainho@crossinganswers.com> for Crossing Answers",
+    "description": "Its a poop World",
+    "author": "Cropólios",
     "contributors": [],
     "main": "index.js",
     "private": true,
