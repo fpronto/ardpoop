@@ -12,9 +12,18 @@ byte Ethernet::buffer[700];
 static uint32_t timerOpen;
 static uint32_t timerClose;
 static uint32_t timerUser;
+static uint32_t timerConfig;
 
-static uint32_t timerUse;
-static uint32_t timerUse2;
+static int configDistance = 0;
+static bool config = true;
+
+// defines pins numbers
+const int trigPin = 9;
+const int echoPin = 10;
+
+// defines variables
+long duration;
+int distance;
 
 const char website[] PROGMEM = "10.132.167.212";
 
@@ -69,11 +78,44 @@ static void user (char* smellyUser) {
   }
 }
 
+void readDistance() {
+ // Clears the trigPin
+digitalWrite(trigPin, LOW);
+delay(2);
+// Sets the trigPin on HIGH state for 10 micro seconds
+digitalWrite(trigPin, HIGH);
+delay(10);
+digitalWrite(trigPin, LOW);
+// Reads the echoPin, returns the sound wave travel time in microseconds
+duration = pulseIn(echoPin, HIGH);
+// Calculating the distance
+distance= duration*0.034/2;
+// Prints the distance on the Serial Monitor
+Serial.print("Distance: ");
+Serial.println(distance);
+}
+
+void configBaseDistance(){
+  for(int i = 0; i < 100; i++) {
+    digitalWrite(trigPin, LOW);
+    delay(2);
+    digitalWrite(trigPin, HIGH);
+    delay(10);
+    digitalWrite(trigPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    distance= duration*0.034/2;
+    Serial.print("Distance: ");
+    Serial.println(distance);
+  }
+}
+
 void setup () {
   Serial.begin(57600);
   Serial.println(F("\n[webClient]"));
 
-  // Change 'SS' to your Slave Select pin, if you arn't using the default pin
+  pinMode(trigPin, OUTPUT);  // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT);   // Sets the echoPin as an Input
+  
   if (ether.begin(sizeof Ethernet::buffer, mymac, 53) == 0)
     Serial.println(F("Failed to access Ethernet controller"));
   if (!ether.dhcpSetup())
@@ -90,15 +132,12 @@ void setup () {
   ether.hisport = 3000;
 }
 
+
+
 void loop () {
-    smell(80);
-    close();
-    if (millis() > timerUse) {
-      timerUse = millis() + 1000;
-      user("123");
-    };
-    if (millis() > timerUse2) {
-      timerUse2 = millis() + 10000;
-      open();
-    };
+  if (config) {
+      configBaseDistance();
+      config = false;
+  }else {
+  }
 }
