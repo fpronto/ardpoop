@@ -1,6 +1,6 @@
 const BadRequest = require('../../../helpers/APIError.js').BadRequest;
 
-function signin(req, res, next) {
+function poop(req, res, next) {
     req.checkBody({
         data: {
             notEmpty: true
@@ -18,5 +18,5 @@ function signin(req, res, next) {
 
 
 module.exports = {
-    signin
+    poop
 };

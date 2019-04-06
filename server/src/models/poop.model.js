@@ -9,6 +9,8 @@ const poopSchema = new Schema({
     smellLevels: [{
         type: Number
     }]
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('poop', poopSchema);
