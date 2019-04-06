@@ -1,0 +1,105 @@
+{
+    "env": {
+        "browser": true
+    },
+    "plugins": [
+        "react"
+    ],
+    "extends": [
+        "airbnb-base",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "node/exports-style": [
+            "error",
+            "module.exports"
+        ],
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".jsx"
+                ]
+            }
+        ],
+        "prefer-destructuring": [
+            "error",
+            {
+                "array": true,
+                "object": true
+            }
+        ],
+        "react/prop-types": 0,
+        "import/imports-first": [
+            "error",
+            "absolute-first"
+        ],
+        "import/newline-after-import": "error",
+        "max-len": [
+            "warn",
+            150
+        ],
+        "no-console": "off",
+        "no-useless-concat": "warn",
+        "no-unused-vars": "warn",
+        "func-names": [
+            "error",
+            "never"
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "prefer-template": "off",
+        "brace-style": [
+            "warn",
+            "stroustrup"
+        ],
+        "wrap-iife": "off",
+        "no-underscore-dangle": "off",
+        "arrow-body-style": "off",
+        "no-lonely-if": "off",
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": false
+            }
+        ],
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
+        "object-curly-newline": "off",
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": "off",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    },
+    "globals": {
+        "angular": true,
+        "document": true,
+        "window": true,
+        "google": true,
+        "async": true,
+        "moment": true,
+        "db": true,
+        "app": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    }
+}
