@@ -5,7 +5,7 @@ const InternalServerError = require('../../../helpers/APIError').InternalServerE
 function top(req, res, next) {
     return poopService.getTopTen((err, docs) => {
         if (err) {
-            return next(new InternalServerError(err.message, 'RECORDING_ELEMENT'));
+            return next(new InternalServerError(err.message, 'FIDING_ELEMENTS'));
         }
         const response = new APISuccess({ top: docs });
         return res.status(response.getStatus()).json(response.getResponse());
@@ -32,8 +32,13 @@ function setOwner(req, res, next) {
         if (err) {
             return next(new InternalServerError(err.message, 'RECORDING_ELEMENT'));
         }
-        const response = new APISuccess({ result: true });
-        return res.status(response.getStatus()).json(response.getResponse());
+        return poopService.getTopTen((error, docs) => {
+            if (error) {
+                return next(new InternalServerError(error.message, 'FIDING_ELEMENTS'));
+            }
+            const response = new APISuccess({ top: docs });
+            return res.status(response.getStatus()).json(response.getResponse());
+        });
     });
 }
 

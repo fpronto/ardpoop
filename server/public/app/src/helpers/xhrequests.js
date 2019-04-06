@@ -43,11 +43,10 @@ export const put = async (url, body) => {
         headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
         cache: 'default',
-        body
+        body: JSON.stringify(body)
     };
 
     const data = await fetch(url, options);
-
     try {
         const json = await data.json();
         return { json, data };

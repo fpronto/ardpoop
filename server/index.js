@@ -39,6 +39,13 @@ app.use('/', (req, res, next) => {
     next();
 }, express.static(path.join(__dirname, '/public')));
 
+app.use(express.static(path.join(__dirname, '/public/build')));
+
+app.get('/', (req, res) => {
+    console.log(__dirname);
+    res.sendFile(path.join(__dirname, '/public/build', 'index.html'));
+});
+
 app.use(cors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -63,6 +70,8 @@ app.use(error.notFound);
 app.use(error.handler);
 
 app.set('port', config.port);
+
+
 
 const server = app.listen(app.get('port'), () => {
     console.log('Sever listen on port ' + server.address().port);

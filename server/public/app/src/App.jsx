@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { get } from './helpers/xhrequests';
-import { Header, Indicator, Table, SmellIndicator } from './components/index';
+import { get, put } from './helpers/xhrequests';
+import { Header, Indicator, Table, SmellIndicator, Form } from './components/index';
 
 import * as config from './config';
 
@@ -13,7 +13,8 @@ class App extends Component {
         this.state = {
             status: false,
             top: [],
-            smellValue: 0
+            smellValue: 0,
+            id: null
         };
         this.loadInfo = () => {
             const { status, toxicity } = this.state;
@@ -59,13 +60,32 @@ class App extends Component {
     }
 
     render() {
-        const { status, top, smellValue } = this.state;
+        const { status, top, smellValue, change, id} = this.state;
+        let topWrapper;
+        if (!change) {
+            topWrapper = <Table top={top} cb={(item) => {
+                if (!item.lock) {
+                    this.setState({ change: true, id: item.id });
+                }
+            }} />;
+        }
+        else {
+            topWrapper = <Form cb={(info) => {
+                const data = put(`${config.dns}:${config.port}/api/v1/session/${id}/owner`, info);
+                console.log(data);
+                data.then((info) => {
+                    if (info.data.status === 200) {
+                        this.setState({ change: false, id: null, top: info.json.data.top });
+                    }
+                });
+            }}/>;
+        }
         return (
             <div className="App">
                 <Header/>
                 <SmellIndicator smellValue={smellValue}/>
                 <Indicator status={status} />
-                <Table top={top}/>
+                {topWrapper}
             </div>
         );
     }
