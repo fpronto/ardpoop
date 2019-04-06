@@ -13,9 +13,15 @@ static uint32_t timerOpen;
 static uint32_t timerClose;
 static uint32_t timerUser;
 static uint32_t timerConfig;
+static uint32_t smellingTimer;
 
-static int configDistance = 0;
+static int baseDistance = 0;
+static int moveCounter = 0;
+static int noMoveCounter = 0;
+
 static bool config = true;
+static bool inUse = false;
+static bool sendingSmell = false;
 
 // defines pins numbers
 const int trigPin = 9;
@@ -27,7 +33,22 @@ int distance;
 
 const char website[] PROGMEM = "10.132.167.212";
 
-// called when the client request is complete
+static void close_callback (byte status, word off, word len) {
+  Serial.println(">>>");
+  Ethernet::buffer[off+300] = 0;
+  Serial.print((const char*) Ethernet::buffer + off);
+  Serial.println("...");
+  inUse = true;
+}
+
+static void open_callback (byte status, word off, word len) {
+  Serial.println(">>>");
+  Ethernet::buffer[off+300] = 0;
+  Serial.print((const char*) Ethernet::buffer + off);
+  Serial.println("...");
+  inUse = false;
+}
+
 static void my_callback (byte status, word off, word len) {
   Serial.println(">>>");
   Ethernet::buffer[off+300] = 0;
@@ -35,32 +56,46 @@ static void my_callback (byte status, word off, word len) {
   Serial.println("...");
 }
 
+static void smell_callback (byte status, word off, word len) {
+  Serial.println(">>>");
+  Ethernet::buffer[off+300] = 0;
+  Serial.print((const char*) Ethernet::buffer + off);
+  Serial.println("...");
+  sendingSmell = false;
+}
+
 static void open () {
-  ether.packetLoop(ether.packetReceive());
-  if (millis() > timerOpen) {
-    timerOpen = millis() + 500;
-    Serial.println("<<< OPEN ");
-    ether.browseUrl(PSTR("/api/v1/open"), "", website, my_callback);
+  while(inUse) {
+    ether.packetLoop(ether.packetReceive());
+    if (millis() > timerOpen) {
+      timerOpen = millis() + 500;
+      Serial.println("<<< OPEN ");
+      ether.browseUrl(PSTR("/api/v1/open"), "", website, open_callback);
+    }
   }
 }
 
 static void close () {
-   ether.packetLoop(ether.packetReceive());
-  if (millis() > timerClose) {
-    timerClose = millis() + 500;
-    Serial.println("<<< CLOSE ");
-    ether.browseUrl(PSTR("/api/v1/close"), "", website, my_callback);
+  while(!inUse) {
+    ether.packetLoop(ether.packetReceive());
+      if (millis() > timerClose) {
+        timerClose = millis() + 500;
+        Serial.println("<<< CLOSE ");
+        ether.browseUrl(PSTR("/api/v1/close"), "", website, close_callback);
+      }
   }
 }
 
 static void smell (int smelly) {
-  ether.packetLoop(ether.packetReceive());
-  if (millis() > timerClose) {
-    timerClose = millis() + 500;
-    Serial.println("<<< SMELL ");
-    char message[50];
-    sprintf(message, "?val=%d", smelly); 
-    ether.browseUrl(PSTR("/api/v1/smell"), message, website, my_callback);
+  while(sendingSmell) {
+    ether.packetLoop(ether.packetReceive());
+    if (millis() > timerClose) {
+      timerClose = millis() + 500;
+      Serial.println("<<< SMELL ");
+      char message[50];
+      sprintf(message, "?val=%d", smelly); 
+      ether.browseUrl(PSTR("/api/v1/smell"), message, website, smell_callback);
+    }
   }
 }
 
@@ -79,24 +114,44 @@ static void user (char* smellyUser) {
 }
 
 void readDistance() {
- // Clears the trigPin
-digitalWrite(trigPin, LOW);
-delay(2);
-// Sets the trigPin on HIGH state for 10 micro seconds
-digitalWrite(trigPin, HIGH);
-delay(10);
-digitalWrite(trigPin, LOW);
-// Reads the echoPin, returns the sound wave travel time in microseconds
-duration = pulseIn(echoPin, HIGH);
-// Calculating the distance
-distance= duration*0.034/2;
-// Prints the distance on the Serial Monitor
-Serial.print("Distance: ");
-Serial.println(distance);
-}
+  digitalWrite(trigPin, LOW);
+  delay(2);
+  digitalWrite(trigPin, HIGH);
+  delay(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance= duration*0.034/2; 
+  int min = baseDistance - 5;
+  int max = baseDistance + 5;
+  if (distance <= min || distance >= max) {
+    moveCounter++;
+    noMoveCounter = 0;
+    if(moveCounter >= 50) {
+      if(inUse == false){
+         Serial.println("Vamos fechar");
+         close();
+         inUse = true;
+      }
+      moveCounter = 0;
+    }
+  }else {
+    moveCounter = 0;
+    noMoveCounter++;
+    if(noMoveCounter >= 500) {
+      if(inUse == true){
+         Serial.println("Vamos abrir");
+         open();
+         inUse = false;
+      }
+      noMoveCounter = 0;
+    }
+  } 
+};
 
 void configBaseDistance(){
-  for(int i = 0; i < 100; i++) {
+  int counter = 0;
+  while(counter != 100) {
+    digitalWrite(11, HIGH);
     digitalWrite(trigPin, LOW);
     delay(2);
     digitalWrite(trigPin, HIGH);
@@ -104,18 +159,34 @@ void configBaseDistance(){
     digitalWrite(trigPin, LOW);
     duration = pulseIn(echoPin, HIGH);
     distance= duration*0.034/2;
-    Serial.print("Distance: ");
-    Serial.println(distance);
+    int min = baseDistance - 5;
+    int max = baseDistance + 5;
+    if (distance >= min && distance <= max) {
+      counter++;
+    }else {
+      counter = 0;
+      baseDistance = distance;
+    }
   }
+}
+
+void smellSmell() {
+ if (millis() > smellingTimer) {
+    smellingTimer = millis() + 1000;
+    int sensorValue;
+    sensorValue = analogRead(A0);
+    sendingSmell= true;
+    smell(sensorValue);
+ }
 }
 
 void setup () {
   Serial.begin(57600);
   Serial.println(F("\n[webClient]"));
-
   pinMode(trigPin, OUTPUT);  // Sets the trigPin as an Output
   pinMode(echoPin, INPUT);   // Sets the echoPin as an Input
-  
+  pinMode(11, OUTPUT);
+
   if (ether.begin(sizeof Ethernet::buffer, mymac, 53) == 0)
     Serial.println(F("Failed to access Ethernet controller"));
   if (!ether.dhcpSetup())
@@ -138,6 +209,12 @@ void loop () {
   if (config) {
       configBaseDistance();
       config = false;
+      Serial.println("CONFIGURADO:");
+      Serial.print("Base Distance: ");
+      Serial.println(baseDistance);
+      digitalWrite(11, LOW);
   }else {
+    smellSmell();
+    readDistance();
   }
 }
