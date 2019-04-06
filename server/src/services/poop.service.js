@@ -82,10 +82,10 @@ function getTopTen(callback) {
     // TODO
     Poop.find({}, '-v', (err, docs) => {
         let returnDocs = docs.map((v) => {
-            const top = Math.max(...v.smellLevels);
+            const top = Math.max(...v.smellLevels).toFixed(2);
             const averageFunc = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
 
-            const average = averageFunc(v.smellLevels);
+            const average = averageFunc(v.smellLevels).toFixed(2);
             return {
                 user: v.user,
                 top,
