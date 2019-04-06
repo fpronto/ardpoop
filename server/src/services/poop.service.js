@@ -90,6 +90,7 @@ function getTopTen(callback) {
 
             const average = averageFunc(v.smellLevels).toFixed(2);
             return {
+                id: v._id,
                 user: v.user,
                 top,
                 average,
@@ -109,6 +110,19 @@ function getTopTen(callback) {
     // return callback(null, true);
 }
 
+function setOwner(options, callback) {
+    const sesson = options.sesson;
+    const name = options.name;
+    sesson.user = name;
+    sesson.lock = true;
+    return sesson.save((err, sessonSaved) => {
+        if (err) {
+            return callback(err);
+        }
+        return callback(null, sessonSaved);
+    });
+}
+
 module.exports = {
     close,
     open,
@@ -116,5 +130,6 @@ module.exports = {
     user,
     getStatus,
     getToxicity,
-    getTopTen
+    getTopTen,
+    setOwner
 };
