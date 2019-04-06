@@ -8,7 +8,11 @@ const poopSchema = new Schema({
     },
     smellLevels: [{
         type: Number
-    }]
+    }],
+    lock: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

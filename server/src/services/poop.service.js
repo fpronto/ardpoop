@@ -1,3 +1,4 @@
+const moment = require('moment');
 const Poop = require('../models/poop.model');
 
 let inUSe = false;
@@ -79,8 +80,10 @@ function getToxicity() {
  * @param {Function} callback - callback function
  */
 function getTopTen(callback) {
-    // TODO
     Poop.find({}, '-v', (err, docs) => {
+        if (err) {
+            return callback(err);
+        }
         let returnDocs = docs.map((v) => {
             const top = Math.max(...v.smellLevels).toFixed(2);
             const averageFunc = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
@@ -90,7 +93,8 @@ function getTopTen(callback) {
                 user: v.user,
                 top,
                 average,
-                date: v.createdAt
+                lock: v.lock,
+                date: moment(v.createdAt).format('lll')
             };
         });
         returnDocs = returnDocs.sort((a, b) => {
@@ -98,9 +102,7 @@ function getTopTen(callback) {
         });
         returnDocs = returnDocs.slice(0, 10);
 
-        if (err) {
-            return callback(err);
-        }
+
         return callback(null, returnDocs);
     });
     // return
