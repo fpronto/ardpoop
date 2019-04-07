@@ -1,0 +1,19 @@
+{
+  "main.css": "/static/css/main.6ddc94b1.chunk.css",
+  "main.js": "/static/js/main.5d50a694.chunk.js",
+  "main.js.map": "/static/js/main.5d50a694.chunk.js.map",
+  "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+  "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+  "static/css/2.ff162d69.chunk.css": "/static/css/2.ff162d69.chunk.css",
+  "static/js/2.0c00ba7a.chunk.js": "/static/js/2.0c00ba7a.chunk.js",
+  "static/js/2.0c00ba7a.chunk.js.map": "/static/js/2.0c00ba7a.chunk.js.map",
+  "index.html": "/index.html",
+  "precache-manifest.f105954e0ea5a1fd43eba6549aa482dc.js": "/precache-manifest.f105954e0ea5a1fd43eba6549aa482dc.js",
+  "service-worker.js": "/service-worker.js",
+  "static/css/2.ff162d69.chunk.css.map": "/static/css/2.ff162d69.chunk.css.map",
+  "static/css/main.6ddc94b1.chunk.css.map": "/static/css/main.6ddc94b1.chunk.css.map",
+  "static/media/logo.svg": "/static/media/logo.e6a7f2e3.svg",
+  "static/media/poop_happy.svg": "/static/media/poop_happy.4213c2be.svg",
+  "static/media/poop_sad.svg": "/static/media/poop_sad.b6913af0.svg",
+  "static/media/poop_toxicity.svg": "/static/media/poop_toxicity.62dab8ec.svg"
+}

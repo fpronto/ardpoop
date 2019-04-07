@@ -6,19 +6,35 @@ import 'react-table/react-table.css';
 import './table.css';
 
 const Table = (props) => {
-    const { top } = props;
+    const { top, cb } = props;
     const columns = [{
         Header: 'Name',
-        accessor: 'user'
+        accessor: 'user',
+        style: {
+            textAlign: 'left',
+            fontSize: '20px'
+        }
     }, {
-        Header: 'Average',
-        accessor: 'average'
+        Header: 'Average(pups)',
+        accessor: 'average',
+        style: {
+            textAlign: 'right',
+            fontSize: '20px'
+        }
     }, {
-        Header: 'Top',
-        accessor: 'top'
+        Header: 'Top(pups)',
+        accessor: 'top',
+        style: {
+            textAlign: 'right',
+            fontSize: '20px'
+        }
     }, {
         Header: 'Date',
-        accessor: 'date'
+        accessor: 'date',
+        style: {
+            textAlign: 'right',
+            fontSize: '20px'
+        }
     }];
 
     return (
@@ -28,6 +44,16 @@ const Table = (props) => {
                 columns={columns}
                 pageSize = "10"
                 showPagination = {false}
+                defaultSortMethod = {(a, b, desc) => {
+                    return b - a;
+                }}
+                getTdProps={(state, rowInfo, column, instance) => {
+                    return {
+                        onClick: (e, handleOriginal) => {
+                            cb(rowInfo.original);
+                        }
+                    };
+                }}
             />
         </div>
     );
@@ -38,7 +64,8 @@ Table.defaultProps = {
 };
 
 Table.propTypes = {
-    top: PropTypes.array.isRequired
+    top: PropTypes.array.isRequired,
+    cb: PropTypes.func.isRequired
 };
 
 
