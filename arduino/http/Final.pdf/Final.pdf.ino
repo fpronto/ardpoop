@@ -31,7 +31,7 @@ const int echoPin = 10;
 long duration;
 int distance;
 
-const char website[] PROGMEM = "10.132.167.213";
+const char website[] PROGMEM = "meiopau.com";
 
 static void close_callback (byte status, word off, word len) {
   Serial.println(">>>");
@@ -137,7 +137,7 @@ void readDistance() {
   }else {
     moveCounter = 0;
     noMoveCounter++;
-    if(noMoveCounter >= 200) {
+    if(noMoveCounter >= 50) {
       if(inUse == true){
          Serial.println("Vamos abrir");
          open();
@@ -196,11 +196,12 @@ void setup () {
   ether.printIp("GW:  ", ether.gwip);
   ether.printIp("DNS: ", ether.dnsip);
 
-  // if website is a string containing an IP address instead of a domain name,
-  // then use it directly. Note: the string can not be in PROGMEM.
-  char websiteIP[] = "10.132.167.213";
-  ether.parseIp(ether.hisip, websiteIP);
-  ether.hisport = 9000;
+  //char websiteIP[] = "10.132.167.213";
+  //ether.parseIp(ether.hisip, websiteIP);
+  //ether.hisport = 9000;
+  if (!ether.dnsLookup(website))
+    Serial.println("DNS failed");
+  
 }
 
 
